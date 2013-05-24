@@ -1,18 +1,33 @@
 #include "view.h"
 #include "ui_view.h"
+#include "data/APFC.h"
+#include "function/input/Input.h"
 
 view::view(QWidget *parent) :
     QDialog(parent),
-    apfc(&in, &out),
+    apfc(new APFC()),
+    in(new Input()),
+    out(0),
     ui(new Ui::view)
 {
     ui->setupUi(this);
+    createConnections();
     loadSettings();
-    setRM();
-    setAlgorithmsArg();
     setIntervalA();
     setIntervalF();
-    createConnections();
+    initContour();
+}
+
+#include "../function/output/Output.h"
+#include "../function/output/OutMaker.h"
+#include "../function/output/Delegate.h"
+void view::initContour()
+{
+    OutMaker::fill(ui->contourType);
+    apfc->setInput(in);
+    Delegate* delegate = new Delegate(ui->contourArgs);
+    ui->contourArgs->setItemDelegateForColumn(0, delegate);
+    connect(ui->contourArgs, SIGNAL(clicked(QModelIndex)), ui->contourArgs, SLOT(edit(QModelIndex)));
 }
 
 void view::createConnections()
@@ -25,51 +40,32 @@ void view::createConnections()
     connect(ui->fMax,  SIGNAL(editingFinished()), this, SLOT(setIntervalF()));
     connect(ui->fStep, SIGNAL(editingFinished()), this, SLOT(setIntervalF()));
 
-    connect(ui->K1,   SIGNAL(editingFinished()), this, SLOT(setRM()));
-    connect(ui->T1,   SIGNAL(editingFinished()), this, SLOT(setRM()));
-    connect(ui->T2,   SIGNAL(editingFinished()), this, SLOT(setRM()));
-    connect(ui->ksi1, SIGNAL(editingFinished()), this, SLOT(setRM()));
-    connect(ui->ksi2, SIGNAL(editingFinished()), this, SLOT(setRM()));
-    connect(ui->Ogr,  SIGNAL(editingFinished()), this, SLOT(setRM()));
-
-    connect(ui->forsek1, SIGNAL(editingFinished()), this, SLOT(setAlgorithmsArg()));
-    connect(ui->kF,      SIGNAL(editingFinished()), this, SLOT(setAlgorithmsArg()));
-
     connect(ui->selectDir, SIGNAL(clicked()), this, SLOT(setReportDir()));
     connect(ui->start,     SIGNAL(clicked()), this, SLOT(start()));
+
+    connect(ui->contourType, SIGNAL(currentIndexChanged(int)), this, SLOT(createNewContour(int)));
 }
 
 view::~view()
 {
     saveSettings();
+    delete in;
+    delete out;
+    delete apfc;
     delete ui;
 }
 
 void view::setIntervalA()
 {
-    apfc.setIntervalA(ui->aMin->value(), ui->aMax->value(), ui->aStep->value());
+    apfc->setIntervalA(ui->aMin->value(), ui->aMax->value(), ui->aStep->value());
 }
 
 void view::setIntervalF()
 {
-    apfc.setIntervalF(ui->fMin->value(), ui->fMax->value(), ui->fStep->value());
+    apfc->setIntervalF(ui->fMin->value(), ui->fMax->value(), ui->fStep->value());
 }
 
-void view::setRM()
-{
-    out.setK1(ui->K1->value());
-    out.setT1(ui->T1->value());
-    out.setT2(ui->T2->value());
-    out.setKsi1(ui->ksi1->value());
-    out.setKsi2(ui->ksi2->value());
-    out.setOgr(ui->Ogr->value());
-}
 
-void view::setAlgorithmsArg()
-{
-    out.setForsek1(ui->forsek1->value());
-    out.setKf(ui->kF->value());
-}
 
 #include <QFileDialog>
 void view::setReportDir()
@@ -83,7 +79,10 @@ void view::start()
 {
     if(reportDir.isEmpty()) setReportDir();
     isStarting();
-    apfc.save(reportDir);
+    if(out && in){
+        out->reset();
+        apfc->save(reportDir);
+    }
     isStopped();
 }
 
@@ -93,6 +92,16 @@ void view::saveSettings()
     QSettings settings;
     settings.setValue("geometry", saveGeometry());
     settings.setValue("reportDir", reportDir);
+    settings.setValue("contourType", ui->contourType->currentIndex());
+}
+
+
+void view::createNewContour(int i)
+{
+    if(out) delete out;
+    out = OutMaker::make((OutMaker::Type) ui->contourType->itemData(i).toInt(), this);
+    ui->contourArgs->setModel(out);
+    apfc->setOutput(out);
 }
 
 void view::loadSettings()
@@ -100,6 +109,10 @@ void view::loadSettings()
     QSettings settings;
     restoreGeometry(settings.value("geometry").toByteArray());
     reportDir = settings.value("reportDir").toString();
+    if(ui->contourType->count()){
+        int i = settings.value("contourType", 0).toInt();
+        ui->contourType->setCurrentIndex(i);
+    }
 }
 
 void view::isStarting()
@@ -123,13 +136,6 @@ void view::setVisibleElements(bool isVisible)
     ui->fMax->setEnabled(isVisible);
     ui->fStep->setEnabled(isVisible);
 
-    ui->K1->setEnabled(isVisible);
-    ui->T1->setEnabled(isVisible);
-    ui->T2->setEnabled(isVisible);
-    ui->ksi1->setEnabled(isVisible);
-    ui->ksi2->setEnabled(isVisible);
-    ui->Ogr->setEnabled(isVisible);
-
-    ui->forsek1->setEnabled(isVisible);
-    ui->kF->setEnabled(isVisible);
+    ui->contourArgs->setEnabled(isVisible);
+    ui->contourType->setEnabled(isVisible);
 }

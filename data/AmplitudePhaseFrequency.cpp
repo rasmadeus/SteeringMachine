@@ -15,7 +15,6 @@ APF AmplitudePhaseFrequency::getAPF(
 
     fill(t, in, out, minOut, maxOut, tInMax, tOutMax);
     level(minOut, maxOut, tInMax, tOutMax);
-
     fill(result, minOut, maxOut, tInMax, tOutMax, A, f);
 
     return result;

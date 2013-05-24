@@ -1,8 +1,8 @@
 #include "APFC.h"
 
 #include "../function/input/Input.h"
-#include "../function/steering_machine/SteeringMachine.h"
-APFC::APFC(Input* in, Function* out)
+
+APFC::APFC()
 {
     minF = 1;
     maxF = 70;
@@ -11,16 +11,26 @@ APFC::APFC(Input* in, Function* out)
     maxA = 2/57.3;
     stepA = 0.5/57.3;
 
-    this->out = out;
-    this->in = in;
+    in = 0;
+    out = 0;
     data = new Data();
-    data->setIn(in);
-    data->setOut(out);
 }
 
 APFC::~APFC()
 {
     delete data;
+}
+
+void APFC::setInput(Input* in)
+{
+    this->in = in;
+    data->setIn(in);
+}
+
+void APFC::setOutput(Function *out)
+{
+    this->out = out;
+    data->setOut(out);
 }
 
 void APFC::setIntervalF(const double& minF, const double& maxF, const double& stepF)
@@ -59,14 +69,12 @@ void APFC::save(const QString& dir)
 
 void APFC::fill()
 {
-    apfc.clear();
+    apfc.clear();  
     QVector<APF> apf;
     for(double a = minA; a <= maxA; a += stepA){
         in->setAmplitude(a);
         for(double f = minF; f <= maxF; f += stepF){
             in->setFrequency(f);
-            data->setIn(in);
-            data->setOut(out);
             apf << data->getAPF(in->getAmplitude(), in->getFrequency());
         }
         apfc << apf;

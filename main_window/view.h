@@ -2,9 +2,10 @@
 #define VIEW_H
 
 #include <QDialog>
-#include "function/input/Input.h"
-#include "function/steering_machine/SteeringMachine.h"
-#include "data/APFC.h"
+
+class Output;
+class APFC;
+class Input;
 
 namespace Ui {
     class view;
@@ -20,11 +21,11 @@ public:
 private slots:
     void setIntervalA();
     void setIntervalF();
-    void setRM();
-    void setAlgorithmsArg();
     void setReportDir();
     void start();
+    void createNewContour(int i);
 private:
+    void initContour();
     void createConnections();
     void saveSettings();
     void loadSettings();
@@ -33,9 +34,9 @@ private:
     void setVisibleElements(bool isVisible);
 private:
     QString reportDir;
-    APFC apfc;
-    Input in;
-    SteeringMachine out;
+    APFC* apfc;
+    Input* in;
+    Output* out;
     Ui::view *ui;
 };
 

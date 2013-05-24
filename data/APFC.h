@@ -10,8 +10,10 @@ class Input;
 class APFC
 {
 public:
-    APFC(Input* in, Function* out);
+    APFC();
     ~APFC();
+    void setInput(Input* in);
+    void setOutput(Function* out);
     void setIntervalF(const double& minF, const double& maxF, const double& stepF);
     void setIntervalA(const double& minA, const double& maxA, const double& stepA);
     void save(const QString& dir);

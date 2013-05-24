@@ -28,8 +28,6 @@ void Data::setInterval(const double& xMin, const double& xMax)
 #include "../function/Function.h"
 void Data::calculate()
 {
-    if(!out || !in) return;
-
     clear();
 
     for(double x = xMin; x <= xMax; x += step){
