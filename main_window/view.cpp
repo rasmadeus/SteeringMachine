@@ -2,15 +2,20 @@
 #include "ui_view.h"
 #include "data/APFC.h"
 #include "function/input/Input.h"
+#include "APFCThread.h"
 
 view::view(QWidget *parent) :
     QDialog(parent),
-    apfc(new APFC()),
+    apfc(new APFC(parent)),
     in(new Input()),
     out(0),
+    thread(new APFCThread(parent)),
     ui(new Ui::view)
 {
     ui->setupUi(this);
+
+    thread->setAPFC(apfc);
+    thread->setInput(in);
     createConnections();
     loadSettings();
     setIntervalA();
@@ -44,10 +49,21 @@ void view::createConnections()
     connect(ui->start,     SIGNAL(clicked()), this, SLOT(start()));
 
     connect(ui->contourType, SIGNAL(currentIndexChanged(int)), this, SLOT(createNewContour(int)));
+
+    connect(thread, SIGNAL(started()), this, SLOT(threadWasStarted()));
+    connect(thread, SIGNAL(finished()), this, SLOT(threadWasFinished()));
+    connect(thread, SIGNAL(terminated()), this, SLOT(threadWasFinished()));
+
+    connect(apfc, SIGNAL(wasAmplitudeStep(int)), ui->AProgressBar, SLOT(setValue(int)));
+    connect(apfc, SIGNAL(wasFrequencyStep(int)), ui->fProgressBar, SLOT(setValue(int)));
+
 }
 
 view::~view()
 {
+    if(thread->isRunning()){
+        thread->terminate();
+    }
     saveSettings();
     delete in;
     delete out;
@@ -57,7 +73,7 @@ view::~view()
 
 void view::setIntervalA()
 {
-    apfc->setIntervalA(ui->aMin->value(), ui->aMax->value(), ui->aStep->value());
+    apfc->setIntervalA(ui->aMin->value(), ui->aMax->value(), ui->aStep->value());    
 }
 
 void view::setIntervalF()
@@ -65,25 +81,37 @@ void view::setIntervalF()
     apfc->setIntervalF(ui->fMin->value(), ui->fMax->value(), ui->fStep->value());
 }
 
-
-
 #include <QFileDialog>
 void view::setReportDir()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Укажите директорию для отчёта"), reportDir);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Укажите директорию для отчёта"), thread->getReportDir());
     if(dir.isEmpty()) return;
-    reportDir = dir;
+    thread->setReportDir(dir);
 }
 
 void view::start()
 {
-    if(reportDir.isEmpty()) setReportDir();
-    isStarting();
-    if(out && in){
-        out->reset();
-        apfc->save(reportDir);
+    if(thread->isRunning()){
+        thread->terminate();
     }
-    isStopped();
+    else{
+        if(thread->reportDirIsEmpty()){
+            setReportDir();
+        }
+        thread->start();
+    }
+}
+
+void view::threadWasStarted()
+{
+   setElementsEnabled(false, tr("Прервать расчёт АФЧХ"));
+}
+
+void view::threadWasFinished()
+{
+    setElementsEnabled(true, tr("Произвести расчёт АФЧХ"));
+    ui->AProgressBar->setValue(0);
+    ui->fProgressBar->setValue(0);
 }
 
 #include <QSettings>
@@ -91,7 +119,7 @@ void view::saveSettings()
 {
     QSettings settings;
     settings.setValue("geometry", saveGeometry());
-    settings.setValue("reportDir", reportDir);
+    thread->saveReportDir(settings);
     settings.setValue("contourType", ui->contourType->currentIndex());
 }
 
@@ -100,42 +128,32 @@ void view::createNewContour(int i)
 {
     if(out) delete out;
     out = OutMaker::make((OutMaker::Type) ui->contourType->itemData(i).toInt(), this);
+    thread->setOutput(out);
     ui->contourArgs->setModel(out);
-    apfc->setOutput(out);
+    apfc->setOutput(out);    
 }
 
 void view::loadSettings()
 {
     QSettings settings;
     restoreGeometry(settings.value("geometry").toByteArray());
-    reportDir = settings.value("reportDir").toString();
+    thread->restoreReportDir(settings);
     if(ui->contourType->count()){
         int i = settings.value("contourType", 0).toInt();
         ui->contourType->setCurrentIndex(i);
     }
 }
 
-void view::isStarting()
+void view::setElementsEnabled(bool is, const QString& text)
 {
-    setVisibleElements(false);
-    ui->start->setText(tr("Ждите - идёт расчёт"));
+    ui->countersGB->setEnabled(is);
+    ui->selectDir->setEnabled(is);
+    ui->start->setText(text);
+    ui->aMax->setEnabled(is);
+    ui->aMin->setEnabled(is);
+    ui->aStep->setEnabled(is);
+    ui->fMax->setEnabled(is);
+    ui->fMin->setEnabled(is);
+    ui->fStep->setEnabled(is);
 }
 
-void view::isStopped()
-{
-    ui->start->setText(tr("Произвести расчёт"));
-    setVisibleElements(true);
-}
-
-void view::setVisibleElements(bool isVisible)
-{
-    ui->aMin->setEnabled(isVisible);
-    ui->aMax->setEnabled(isVisible);
-    ui->aStep->setEnabled(isVisible);
-    ui->fMin->setEnabled(isVisible);
-    ui->fMax->setEnabled(isVisible);
-    ui->fStep->setEnabled(isVisible);
-
-    ui->contourArgs->setEnabled(isVisible);
-    ui->contourType->setEnabled(isVisible);
-}

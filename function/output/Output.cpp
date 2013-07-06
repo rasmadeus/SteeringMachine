@@ -1,7 +1,6 @@
 #include "Output.h"
 
-Output::Output(const QVector<QPair<QString, double> >& defaultArgs, QObject *parent) :
-    args(defaultArgs),
+Output::Output(QObject *parent) :
     QAbstractTableModel(parent)
 {
 }

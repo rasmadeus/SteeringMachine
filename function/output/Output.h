@@ -10,7 +10,7 @@ class Output : public QAbstractTableModel, public Function
 {
     Q_OBJECT
 public:
-    explicit Output(const QVector<QPair<QString, double> >& defaultArgs, QObject *parent = 0);
+    explicit Output(QObject *parent = 0);
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;

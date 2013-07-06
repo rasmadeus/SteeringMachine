@@ -11,7 +11,11 @@ public:
 
     enum Type{
         STEERING_MACHINE,
-        NEW_ANTIBLEND_FILTER
+        NEW_ANTIBLEND_FILTER,
+        WITH_BACK_LINK,
+        WITHOUT_BACK_LINK,
+        WITHOUT_BACK_LINK_SAVE,
+        OSCILLARY_LINK
     };
 
     static Output* make(Type type, QObject* parent);

@@ -13,17 +13,13 @@ public:
     Data();
     void setOut(Function* out);
     void setIn(Function* in);
-    void setInterval(const double& xMin, const double& xMax);
-    APF getAPF(const double& A, const double& f);
+    APF getAPF(const double& A, const double& f, const double& step);
 private:
     void clear();
-    void calculate();
+    void calculate(const double& f);
 private:
-    static const double step;
-    double xMin, xMax;
     Function* out;
     Function* in;
-    QVector<double> argValues;
     QVector<double> inValues;
     QVector<double> outValues;
 };

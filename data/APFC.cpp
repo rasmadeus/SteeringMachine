@@ -2,18 +2,25 @@
 
 #include "../function/input/Input.h"
 
-APFC::APFC()
+#include <qmath.h>
+
+const static double ONE_RAD_IN_DGR = 180/M_PI;
+
+APFC::APFC(QObject* parent):
+    QObject(parent)
 {
     minF = 1;
     maxF = 70;
     stepF = 1;
-    minA = 0.5/57.3;
-    maxA = 2/57.3;
-    stepA = 0.5/57.3;
+    minA = 0.5/ONE_RAD_IN_DGR;
+    maxA = 2/ONE_RAD_IN_DGR;
+    stepA = 0.5/ONE_RAD_IN_DGR;
 
     in = 0;
     out = 0;
     data = new Data();
+
+    aPB = fPB = 0;
 }
 
 APFC::~APFC()
@@ -42,9 +49,9 @@ void APFC::setIntervalF(const double& minF, const double& maxF, const double& st
 
 void APFC::setIntervalA(const double& minA, const double& maxA, const double& stepA)
 {
-    this->minA = minA/57.3;
-    this->maxA = maxA/57.3;
-    this->stepA = stepA/57.3;
+    this->minA = minA/ONE_RAD_IN_DGR;
+    this->maxA = maxA/ONE_RAD_IN_DGR;
+    this->stepA = stepA/ONE_RAD_IN_DGR;
 }
 
 #include <QFile>
@@ -67,17 +74,28 @@ void APFC::save(const QString& dir)
     }
 }
 
+#include <QProgressBar>
 void APFC::fill()
 {
     apfc.clear();  
-    QVector<APF> apf;
+    QVector<APF> apf;    
+
     for(double a = minA; a <= maxA; a += stepA){
+
         in->setAmplitude(a);
+
         for(double f = minF; f <= maxF; f += stepF){
+
+            emit wasFrequencyStep(100 * f / (maxF - minF));
+
             in->setFrequency(f);
-            apf << data->getAPF(in->getAmplitude(), in->getFrequency());
+            apf << data->getAPF(in->getAmplitude(), in->getFrequency(), in->getStep());
         }
+
         apfc << apf;
         apf.clear();
+
+        emit wasAmplitudeStep(100 * a / (maxA - minA));
+
     }
 }

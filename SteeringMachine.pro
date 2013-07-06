@@ -21,7 +21,16 @@ SOURCES += main.cpp\
     function/output/child/SteeringMachine.cpp \
     function/output/OutMaker.cpp \
     function/output/Delegate.cpp \
-    function/output/child/NewAntiBlendFilter.cpp
+    function/output/child/NewAntiBlendFilter.cpp \
+    data/APF.cpp \
+    function/output/child/rudder_play/CRudderPlay.cpp \
+    function/output/child/RudderPlay.cpp \
+    function/output/child/rudder_play_child/WithoutBackLink.cpp \
+    function/output/child/rudder_play_child/WithBackLink.cpp \
+    function/output/child/rudder_play_child/WithoutBackLinkSave.cpp \
+    function/output/child/OscillatoryLink.cpp \
+    function/output/child/Sinus.cpp \
+    main_window/APFCThread.cpp
 
 HEADERS  +=  function/Function.h \
     function/input/Input.h \
@@ -33,12 +42,57 @@ HEADERS  +=  function/Function.h \
     function/output/child/SteeringMachine.h \
     function/output/OutMaker.h \
     function/output/Delegate.h \
-    function/output/child/NewAntiBlendFilter.h
+    function/output/child/NewAntiBlendFilter.h \
+    function/output/child/rudder_play/CRudderPlay.h \
+    function/output/child/RudderPlay.h \
+    function/output/child/rudder_play_child/WithoutBackLink.h \
+    function/output/child/rudder_play_child/WithBackLink.h \
+    function/output/child/rudder_play_child/WithoutBackLinkSave.h \
+    function/output/child/OscillatoryLink.h \
+    function/output/child/Sinus.h \
+    main_window/APFCThread.h
 
 FORMS    +=  main_window/view.ui
 
 RESOURCES += \
     resources.qrc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

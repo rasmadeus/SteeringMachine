@@ -6,6 +6,7 @@
 class Output;
 class APFC;
 class Input;
+class APFCThread;
 
 namespace Ui {
     class view;
@@ -23,20 +24,20 @@ private slots:
     void setIntervalF();
     void setReportDir();
     void start();
+    void threadWasStarted();
+    void threadWasFinished();
     void createNewContour(int i);
 private:
     void initContour();
     void createConnections();
     void saveSettings();
     void loadSettings();
-    void isStarting();
-    void isStopped();
-    void setVisibleElements(bool isVisible);
+    void setElementsEnabled(bool is, const QString& text);
 private:
-    QString reportDir;
     APFC* apfc;
     Input* in;
     Output* out;
+    APFCThread* thread;
     Ui::view *ui;
 };
 

@@ -1,23 +1,19 @@
 #include "SteeringMachine.h"
 
-const double SteeringMachine::dT;
-
 #include <QPair>
 #include <QVector>
 SteeringMachine::SteeringMachine(QObject* parent):
-    Output(
-        QVector<QPair<QString, double> > () <<
-                QPair<QString, double>("Forsek1", 2.87)   <<
-                QPair<QString, double>("kF",      0.0069) <<
-                QPair<QString, double>("K1",      36.792) <<
-                QPair<QString, double>("T1",      0.002)  <<
-                QPair<QString, double>("T2",      0.002)  <<
-                QPair<QString, double>("ksi1",    0.2)    <<
-                QPair<QString, double>("ksi2",    0.2)    <<
-                QPair<QString, double>("Ogr",     240),
-        parent
-    )
+    Output(parent)
 {    
+    args <<
+    QPair<QString, double>("Forsek1", 0)    <<
+    QPair<QString, double>("kF",      0) <<
+    QPair<QString, double>("K1",      0) <<
+    QPair<QString, double>("T1",      0)  <<
+    QPair<QString, double>("T2",      0) <<
+    QPair<QString, double>("ksi1",    0)    <<
+    QPair<QString, double>("ksi2",    0)    <<
+    QPair<QString, double>("Ogr",     0);
 }
 
 
@@ -56,29 +52,33 @@ const double& SteeringMachine::ksi2() const
     return args[6].second;
 }
 
-const double& SteeringMachine::Ogr() const
+double SteeringMachine::Ogr() const
 {
-    return args[7].second;
+    return !args[7].second ? 0 : args[7].second;
+}
+
+
+void SteeringMachine::firstStep(const double &in)
+{
+    X1 = in - output;
 }
 
 #include <qmath.h>
+void SteeringMachine::middleStep()
+{
+   //implementation was removed
+}
+
+double SteeringMachine::lastStep()
+{
+    return output;
+}
+
 double SteeringMachine::out(const double &in)
 {
-    X1 = in - output;
-
-    for(int j=0; j<5; ++j)
-    {
-        double kf   = fabs(X1) < kF() ? Forsek1() : 1;
-        double dX2  = (kf*K1()*X1 - X2) / T2();
-        double dX3  = X4;
-        double dX4  = (2*(ksi2()-ksi1())*T1()*X2-X3)/T1()/T1()-2*ksi2()/T1()*X4;
-        double X5   = 0.5*(fabs(X2 - X3 + Ogr()) - fabs(X2 - X3 - Ogr()));
-        X2     += dX2*dT;
-        X3     += dX3*dT;
-        X4     += dX4*dT;
-        output += X5 *dT;
-    }
-    return output;
+    firstStep(in);
+    middleStep();
+    return lastStep();
 }
 
 void SteeringMachine::reset()
