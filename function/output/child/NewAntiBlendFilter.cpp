@@ -1,4 +1,4 @@
-#include "NewAntiBlendFilter.h"
+﻿#include "NewAntiBlendFilter.h"
 #include "../../../data/Data.h"
 class NewAntiBlendFilter::LinkAvionika: public Function{
     public:
@@ -9,6 +9,8 @@ class NewAntiBlendFilter::LinkAvionika: public Function{
 
         double out(const double& in){
            //implementation was removed
+            Q_UNUSED(in)
+            return 0;
         }
 
         void reset(double T1, double ksi1, double ksi2){

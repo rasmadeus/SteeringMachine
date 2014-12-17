@@ -1,4 +1,4 @@
-#ifndef APFC_H
+﻿#ifndef APFC_H
 #define APFC_H
 
 class Input;

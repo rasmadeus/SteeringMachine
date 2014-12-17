@@ -1,4 +1,4 @@
-#include "APFCThread.h"
+﻿#include "APFCThread.h"
 #include "data/APFC.h"
 #include "function/input/Input.h"
 #include "../function/output/Output.h"

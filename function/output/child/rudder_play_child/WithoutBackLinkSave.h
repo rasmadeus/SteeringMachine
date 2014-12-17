@@ -1,4 +1,4 @@
-#ifndef WITHOUTBACKLINKSAVE_H
+﻿#ifndef WITHOUTBACKLINKSAVE_H
 #define WITHOUTBACKLINKSAVE_H
 
 #include "../RudderPlay.h"

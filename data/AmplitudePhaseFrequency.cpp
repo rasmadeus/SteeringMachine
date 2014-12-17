@@ -1,4 +1,4 @@
-#include "AmplitudePhaseFrequency.h"
+﻿#include "AmplitudePhaseFrequency.h"
 
 #include <QDebug>
 APF AmplitudePhaseFrequency::getAPF(

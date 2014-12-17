@@ -1,4 +1,5 @@
-#include "CRudderPlay.h"
+﻿#include "CRudderPlay.h"
+#include <qglobal.h>
 
 CRudderPlay::CRudderPlay()
 {
@@ -12,11 +13,14 @@ CRudderPlay::CRudderPlay()
 CRudderPlay::CRudderPlay(double Play)
 {
 //implementation was removed
+    Q_UNUSED(Play);
 }
 
 CRudderPlay::CRudderPlay(double Play, double Rudder)
 {
 //implementation was removed
+    Q_UNUSED(Play);
+    Q_UNUSED(Rudder);
 }
 CRudderPlay::~CRudderPlay()
 {
@@ -24,14 +28,17 @@ CRudderPlay::~CRudderPlay()
 void CRudderPlay::SetFreePlay(double Play)
 {
 //implementation was removed
+    Q_UNUSED(Play);
 }
 void CRudderPlay::SetZeroShift(double Shift)
 {
 //implementation was removed
+    Q_UNUSED(Shift);
 }
 void CRudderPlay::SetValue(double Rudder)
 {
 //implementation was removed
+    Q_UNUSED(Rudder);
 }
 #define _OSCILFREQ 0
 double CRudderPlay::PlayRudder(double Rudder)
@@ -41,6 +48,7 @@ double CRudderPlay::PlayRudder(double Rudder)
     double OscPhase = sin(_OSCILFREQ*gd_2PI*gpc_Task->bd_T);
 #else
     double OscPhase = 1.0;
+    Q_UNUSED(OscPhase);
 #endif
 #else
     double OscPhase = 1.0;

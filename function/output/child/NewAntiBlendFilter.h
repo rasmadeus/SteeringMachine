@@ -1,4 +1,4 @@
-#ifndef NEWANTIBLENDFILTER_H
+﻿#ifndef NEWANTIBLENDFILTER_H
 #define NEWANTIBLENDFILTER_H
 
 #include "../Output.h"

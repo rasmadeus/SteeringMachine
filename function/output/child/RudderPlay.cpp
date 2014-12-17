@@ -1,4 +1,4 @@
-#include "RudderPlay.h"
+﻿#include "RudderPlay.h"
 
 RudderPlay::RudderPlay(QObject* parent) :
     SteeringMachine(parent)

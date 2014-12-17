@@ -1,4 +1,4 @@
-#include "OutMaker.h"
+п»ї#include "OutMaker.h"
 
 #include "child/SteeringMachine.h"
 #include "child/NewAntiBlendFilter.h"
@@ -26,5 +26,5 @@ void OutMaker::fill(QComboBox* cb)
     cb->addItem(QObject::tr(""), WITHOUT_BACK_LINK);
     cb->addItem(QObject::tr(""), WITH_BACK_LINK);
     cb->addItem(QObject::tr(""), WITHOUT_BACK_LINK_SAVE);
-    cb->addItem(QObject::tr("Колебательное звено"), OSCILLARY_LINK);
+    cb->addItem(QObject::tr("РљРѕР»РµР±Р°С‚РµР»СЊРЅРѕРµ Р·РІРµРЅРѕ"), OSCILLARY_LINK);
 }

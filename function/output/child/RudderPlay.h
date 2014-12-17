@@ -1,4 +1,4 @@
-#ifndef RUDDERPLAY_H
+﻿#ifndef RUDDERPLAY_H
 #define RUDDERPLAY_H
 
 #include "SteeringMachine.h"

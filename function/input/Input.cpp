@@ -1,4 +1,4 @@
-#include "Input.h"
+﻿#include "Input.h"
 
 void Input::setAmplitude(const double& A)
 {

@@ -1,4 +1,4 @@
-#ifndef SINUS_H
+﻿#ifndef SINUS_H
 #define SINUS_H
 
 #include "../Output.h"

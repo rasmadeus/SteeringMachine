@@ -1,4 +1,4 @@
-#ifndef OUTMAKER_H
+﻿#ifndef OUTMAKER_H
 #define OUTMAKER_H
 
 class Output;

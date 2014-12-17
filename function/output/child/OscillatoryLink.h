@@ -1,4 +1,4 @@
-#ifndef OSCILLATORYLINK_H
+﻿#ifndef OSCILLATORYLINK_H
 #define OSCILLATORYLINK_H
 
 #include "../Output.h"

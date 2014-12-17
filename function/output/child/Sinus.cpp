@@ -1,4 +1,4 @@
-#include "Sinus.h"
+﻿#include "Sinus.h"
 
 Sinus::Sinus(QObject *parent) :
     Output(parent)

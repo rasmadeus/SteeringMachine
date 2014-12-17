@@ -1,4 +1,4 @@
-#ifndef CRUDDERPLAY_H
+﻿#ifndef CRUDDERPLAY_H
 #define CRUDDERPLAY_H
 
 class CRudderPlay

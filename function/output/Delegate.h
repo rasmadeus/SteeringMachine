@@ -1,4 +1,4 @@
-#ifndef DELEGATE_H
+﻿#ifndef DELEGATE_H
 #define DELEGATE_H
 
 #include <QItemDelegate>

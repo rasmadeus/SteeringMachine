@@ -1,4 +1,4 @@
-#include "OscillatoryLink.h"
+﻿#include "OscillatoryLink.h"
 #include "../../../data/Data.h"
 OscillatoryLink::OscillatoryLink(QObject *parent):
     Output(parent)

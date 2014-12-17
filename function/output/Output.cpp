@@ -1,4 +1,4 @@
-#include "Output.h"
+п»ї#include "Output.h"
 
 Output::Output(QObject *parent) :
     QAbstractTableModel(parent)
@@ -34,7 +34,7 @@ bool Output::setData(const QModelIndex& index, const QVariant& value, int role)
 QVariant Output::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role != Qt::DisplayRole) return QVariant();
-    return orientation == Qt::Horizontal ? tr("Значение") : args[section].first;
+    return orientation == Qt::Horizontal ? tr("Р—РЅР°С‡РµРЅРёРµ") : args[section].first;
 }
 
 Qt::ItemFlags Output::flags(const QModelIndex& index) const

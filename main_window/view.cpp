@@ -1,4 +1,4 @@
-#include "view.h"
+ï»¿#include "view.h"
 #include "ui_view.h"
 #include "data/APFC.h"
 #include "function/input/Input.h"
@@ -52,7 +52,6 @@ void view::createConnections()
 
     connect(thread, SIGNAL(started()), this, SLOT(threadWasStarted()));
     connect(thread, SIGNAL(finished()), this, SLOT(threadWasFinished()));
-    connect(thread, SIGNAL(terminated()), this, SLOT(threadWasFinished()));
 
     connect(apfc, SIGNAL(wasAmplitudeStep(int)), ui->AProgressBar, SLOT(setValue(int)));
     connect(apfc, SIGNAL(wasFrequencyStep(int)), ui->fProgressBar, SLOT(setValue(int)));
@@ -84,7 +83,7 @@ void view::setIntervalF()
 #include <QFileDialog>
 void view::setReportDir()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Óêàæèòå äèðåêòîðèþ äëÿ îò÷¸òà"), thread->getReportDir());
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Ð£ÐºÐ°Ð¶Ð¸Ñ‚Ðµ Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸ÑŽ Ð´Ð»Ñ Ð¾Ñ‚Ñ‡Ñ‘Ñ‚Ð°"), thread->getReportDir());
     if(dir.isEmpty()) return;
     thread->setReportDir(dir);
 }
@@ -104,12 +103,12 @@ void view::start()
 
 void view::threadWasStarted()
 {
-   setElementsEnabled(false, tr("Ïðåðâàòü ðàñ÷¸ò ÀÔ×Õ"));
+   setElementsEnabled(false, tr("ÐŸÑ€ÐµÑ€Ð²Ð°Ñ‚ÑŒ Ñ€Ð°ÑÑ‡Ñ‘Ñ‚ ÐÐ¤Ð§Ð¥"));
 }
 
 void view::threadWasFinished()
 {
-    setElementsEnabled(true, tr("Ïðîèçâåñòè ðàñ÷¸ò ÀÔ×Õ"));
+    setElementsEnabled(true, tr("ÐŸÑ€Ð¾Ð¸Ð·Ð²ÐµÑÑ‚Ð¸ Ñ€Ð°ÑÑ‡Ñ‘Ñ‚ ÐÐ¤Ð§Ð¥"));
     ui->AProgressBar->setValue(0);
     ui->fProgressBar->setValue(0);
 }

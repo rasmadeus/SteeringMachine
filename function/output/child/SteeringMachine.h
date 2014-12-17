@@ -1,4 +1,4 @@
-#ifndef STEERINGMACHINE_H
+﻿#ifndef STEERINGMACHINE_H
 #define STEERINGMACHINE_H
 
 #include "../Output.h"

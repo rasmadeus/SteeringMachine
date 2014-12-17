@@ -1,4 +1,4 @@
-#include <QApplication>
+﻿#include <QApplication>
 #include <QFileDialog>
 #include "../function/input/Input.h"
 #include "../function/steering_machine/SteeringMachine.h"

@@ -1,4 +1,4 @@
-#include "SteeringMachine.h"
+﻿#include "SteeringMachine.h"
 
 #include <QPair>
 #include <QVector>

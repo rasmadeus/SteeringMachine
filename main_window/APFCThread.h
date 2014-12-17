@@ -1,4 +1,4 @@
-#ifndef APFCTHREAD_H
+﻿#ifndef APFCTHREAD_H
 #define APFCTHREAD_H
 
 #include <QThread>

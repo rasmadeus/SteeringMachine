@@ -1,4 +1,4 @@
-#include "AmplitudePhaseFrequency.h"
+﻿#include "AmplitudePhaseFrequency.h"
 
 APF::APF(){
     w = lgW = A = lgA = dt = dPhase = 0;

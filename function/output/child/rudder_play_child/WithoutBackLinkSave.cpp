@@ -1,4 +1,4 @@
-#include "WithoutBackLinkSave.h"
+﻿#include "WithoutBackLinkSave.h"
 
 WithoutBackLinkSave::WithoutBackLinkSave(QObject* parent) :
     RudderPlay(parent)
